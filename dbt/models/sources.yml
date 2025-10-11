@@ -1,0 +1,101 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Raw data from CSV files loaded by Airflow
+    database: postgres
+    schema: bronze
+
+    tables:
+      - name: raw_census_g01
+        description: Raw Census G01 data - Selected Person Characteristics by Sex
+        columns:
+          - name: lga_code_2016
+            description: LGA code from 2016 Census
+            tests:
+              - not_null
+              - unique
+          - name: tot_p_m
+            description: Total male population
+            tests:
+              - not_null
+          - name: tot_p_f
+            description: Total female population
+            tests:
+              - not_null
+
+      - name: raw_census_g02
+        description: Raw Census G02 data - Selected Medians and Averages
+        columns:
+          - name: lga_code_2016
+            description: LGA code from 2016 Census
+            tests:
+              - not_null
+              - unique
+          - name: median_age_persons
+            description: Median age of persons
+            tests:
+              - not_null
+          - name: median_mortgage_repay_monthly
+            description: Median monthly mortgage repayment
+          - name: median_tot_hhd_inc_weekly
+            description: Median total household income weekly
+
+      - name: raw_lga_mapping
+        description: Raw LGA to Suburb mapping data
+        columns:
+          - name: lga_name
+            description: LGA name
+            tests:
+              - not_null
+          - name: suburb_name
+            description: Suburb name
+            tests:
+              - not_null
+
+      - name: raw_airbnb_listings
+        description: Raw Airbnb listings data from May 2020
+        columns:
+          - name: listing_id
+            description: Unique listing identifier
+            tests:
+              - not_null
+              - unique
+          - name: listing_neighbourhood
+            description: Neighbourhood where listing is located
+            tests:
+              - not_null
+          - name: host_id
+            description: Unique host identifier
+            tests:
+              - not_null
+          - name: host_neighbourhood
+            description: Neighbourhood where host is located
+          - name: property_type
+            description: Type of property (apartment, house, etc.)
+            tests:
+              - not_null
+          - name: room_type
+            description: Type of room (entire home, private room, shared room)
+            tests:
+              - not_null
+          - name: accommodates
+            description: Number of people the listing accommodates
+            tests:
+              - not_null
+          - name: has_availability
+            description: Whether listing has availability (t/f)
+            tests:
+              - not_null
+              - accepted_values:
+                  values: ['t', 'f']
+          - name: availability_30
+            description: Number of days available in next 30 days
+          - name: price
+            description: Listing price
+            tests:
+              - not_null
+          - name: scraped_date
+            description: Date when data was scraped
+            tests:
+              - not_null
