@@ -8,6 +8,7 @@
 select
     -- Core identifiers
     listing_id,
+    scrape_id,
     host_id,
     
     -- Location data (cleaned)
@@ -29,20 +30,62 @@ select
     
     -- Price cleaning and validation
     case 
-        when price is not null and price > 0 then price
+        when price is not null and price != '' and price::numeric > 0 then price::numeric
         else null
     end as price_clean,
     
     -- Date handling
     scraped_date,
-    extract(year from scraped_date) as scraped_year,
-    extract(month from scraped_date) as scraped_month,
-    extract(day from scraped_date) as scraped_day,
+    case 
+        when scraped_date ~ '^\d{4}-\d{2}-\d{2}$' then scraped_date::date
+        else null
+    end as scraped_date_clean,
+    
+    -- Host information
+    host_name,
+    host_since,
+    case 
+        when host_is_superhost = 't' then true
+        when host_is_superhost = 'f' then false
+        when host_is_superhost is null or host_is_superhost = '' then null
+        else null
+    end as host_is_superhost_boolean,
+    
+    -- Review scores (convert to numeric)
+    case 
+        when review_scores_rating is not null and review_scores_rating != '' then review_scores_rating::numeric
+        else null
+    end as review_scores_rating_clean,
+    
+    case 
+        when review_scores_accuracy is not null and review_scores_accuracy != '' then review_scores_accuracy::numeric
+        else null
+    end as review_scores_accuracy_clean,
+    
+    case 
+        when review_scores_cleanliness is not null and review_scores_cleanliness != '' then review_scores_cleanliness::numeric
+        else null
+    end as review_scores_cleanliness_clean,
+    
+    case 
+        when review_scores_checkin is not null and review_scores_checkin != '' then review_scores_checkin::numeric
+        else null
+    end as review_scores_checkin_clean,
+    
+    case 
+        when review_scores_communication is not null and review_scores_communication != '' then review_scores_communication::numeric
+        else null
+    end as review_scores_communication_clean,
+    
+    case 
+        when review_scores_value is not null and review_scores_value != '' then review_scores_value::numeric
+        else null
+    end as review_scores_value_clean,
     
     -- Business logic calculations
     case 
-        when has_availability = 't' and availability_30 is not null then
-            (30 - availability_30)
+        when has_availability = 't' and availability_30 is not null and availability_30 != '' then
+            (30 - availability_30::integer)
         else 0
     end as number_of_stays,
     
@@ -50,9 +93,11 @@ select
     case 
         when has_availability = 't' 
          and price is not null 
-         and price > 0 
-         and availability_30 is not null then
-            price * (30 - availability_30)
+         and price != ''
+         and price::numeric > 0 
+         and availability_30 is not null 
+         and availability_30 != '' then
+            price::numeric * (30 - availability_30::integer)
         else 0
     end as estimated_revenue_30_days,
     
@@ -77,6 +122,6 @@ where listing_id is not null
   and property_type is not null
   and room_type is not null
   and accommodates is not null
-  and accommodates > 0
+  and accommodates != ''
   and scraped_date >= '2020-01-01'
   and scraped_date <= '2021-12-31'

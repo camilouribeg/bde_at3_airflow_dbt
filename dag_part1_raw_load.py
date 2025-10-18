@@ -27,7 +27,7 @@ dag_default_args = {
 }
 
 dag = DAG(
-    dag_id="part1_raw_load",
+    dag_id="part1_raw_load_v3",
     default_args=dag_default_args,
     schedule_interval=None,
     catchup=True,
@@ -67,12 +67,15 @@ def import_load_dim_g01_func(**kwargs):
     df = pd.read_csv(g01_file_path, encoding="utf-8-sig")
 
     if len(df) > 0:
-        col_names = ["LGA_CODE_2016", "Tot_P_M", "Tot_P_F"]
+        # Get all columns from the CSV file
+        col_names = df.columns.tolist()
         values = df[col_names].to_dict("split")["data"]
         logging.info(values)
 
-        insert_sql = """
-                    INSERT INTO bronze.raw_census_g01(lga_code_2016, tot_p_m, tot_p_f)
+        # Create dynamic INSERT statement based on columns
+        columns_str = ", ".join([col.lower() for col in col_names])
+        insert_sql = f"""
+                    INSERT INTO bronze.raw_census_g01({columns_str})
                     VALUES %s
                     """
         result = execute_values(conn_ps.cursor(), insert_sql, values, page_size=len(df))
@@ -102,17 +105,15 @@ def import_load_dim_g02_func(**kwargs):
     df = pd.read_csv(g02_file_path, encoding="utf-8-sig")
 
     if len(df) > 0:
-        col_names = [
-            "LGA_CODE_2016",
-            "Median_age_persons",
-            "Median_mortgage_repay_monthly",
-            "Median_tot_hhd_inc_weekly",
-        ]
+        # Get all columns from the CSV file
+        col_names = df.columns.tolist()
         values = df[col_names].to_dict("split")["data"]
         logging.info(values)
 
-        insert_sql = """
-                    INSERT INTO bronze.raw_census_g02(lga_code_2016, median_age_persons, median_mortgage_repay_monthly, median_tot_hhd_inc_weekly)
+        # Create dynamic INSERT statement based on columns
+        columns_str = ", ".join([col.lower() for col in col_names])
+        insert_sql = f"""
+                    INSERT INTO bronze.raw_census_g02({columns_str})
                     VALUES %s
                     """
         result = execute_values(conn_ps.cursor(), insert_sql, values, page_size=len(df))
@@ -163,6 +164,41 @@ def import_load_dim_lga_mapping_func(**kwargs):
     return None
 
 
+def import_load_dim_nsw_lga_code_func(**kwargs):
+
+    # Setup Postgres connection
+    ps_pg_hook = PostgresHook(postgres_conn_id="postgres")
+    conn_ps = ps_pg_hook.get_conn()
+
+    # Check if the file exists
+    nsw_lga_file_path = DIMENSIONS + "nsw_lga_code.csv"
+    if not os.path.exists(nsw_lga_file_path):
+        logging.info("No nsw_lga_code.csv file found.")
+        return None
+
+    # Generate dataframe by reading the CSV file
+    df = pd.read_csv(nsw_lga_file_path, encoding="utf-8-sig")
+
+    if len(df) > 0:
+        col_names = ["LGA_CODE", "LGA_NAME"]
+        values = df[col_names].to_dict("split")["data"]
+        logging.info(values)
+
+        insert_sql = """
+                    INSERT INTO bronze.raw_nsw_lga_code(lga_code, lga_name)
+                    VALUES %s
+                    """
+        result = execute_values(conn_ps.cursor(), insert_sql, values, page_size=len(df))
+        conn_ps.commit()
+
+        # Move the processed file to the archive folder
+        archive_folder = os.path.join(DIMENSIONS, "archive")
+        if not os.path.exists(archive_folder):
+            os.makedirs(archive_folder)
+        shutil.move(nsw_lga_file_path, os.path.join(archive_folder, "nsw_lga_code.csv"))
+    return None
+
+
 def import_load_facts_func(**kwargs):
 
     # Setup Postgres connection
@@ -187,24 +223,15 @@ def import_load_facts_func(**kwargs):
     )
 
     if len(df) > 0:
-        col_names = [
-            "LISTING_ID",
-            "LISTING_NEIGHBOURHOOD",
-            "HOST_ID",
-            "HOST_NEIGHBOURHOOD",
-            "PROPERTY_TYPE",
-            "ROOM_TYPE",
-            "ACCOMMODATES",
-            "HAS_AVAILABILITY",
-            "AVAILABILITY_30",
-            "PRICE",
-            "SCRAPED_DATE",
-        ]
+        # Get all columns from the CSV file
+        col_names = df.columns.tolist()
         values = df[col_names].to_dict("split")["data"]
         logging.info(values)
 
-        insert_sql = """
-                    INSERT INTO bronze.raw_airbnb_listings(listing_id, listing_neighbourhood, host_id, host_neighbourhood, property_type, room_type, accommodates, has_availability, availability_30, price, scraped_date)
+        # Create dynamic INSERT statement based on columns
+        columns_str = ", ".join([col.lower() for col in col_names])
+        insert_sql = f"""
+                    INSERT INTO bronze.raw_airbnb_listings({columns_str})
                     VALUES %s
                     """
         result = execute_values(conn_ps.cursor(), insert_sql, values, page_size=len(df))
@@ -240,9 +267,17 @@ import_load_dim_g02_task = PythonOperator(
     dag=dag,
 )
 
+
 import_load_dim_lga_mapping_task = PythonOperator(
     task_id="import_load_dim_lga_mapping_id",
     python_callable=import_load_dim_lga_mapping_func,
+    provide_context=True,
+    dag=dag,
+)
+
+import_load_dim_nsw_lga_code_task = PythonOperator(
+    task_id="import_load_dim_nsw_lga_code_id",
+    python_callable=import_load_dim_nsw_lga_code_func,
     provide_context=True,
     dag=dag,
 )
@@ -259,4 +294,5 @@ import_load_facts_task = PythonOperator(
     import_load_dim_g01_task,
     import_load_dim_g02_task,
     import_load_dim_lga_mapping_task,
+    import_load_dim_nsw_lga_code_task,
 ] >> import_load_facts_task
