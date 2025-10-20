@@ -1,0 +1,171 @@
+\section{Data Pipeline Architecture and Implementation (Parts 1-2)}
+
+\subsection{Overview}
+This section details the technical implementation of Parts 1 and 2, focusing on infrastructure setup, data ingestion processes, and Bronze layer creation using Apache Airflow and dbt Cloud.
+
+% TODO: Add infrastructure/architecture diagram here - Figure~\ref{fig:pipeline-overview} will show the complete workflow
+
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=\textwidth]{images/ingestion_pipeline.png}
+%   \caption{ELT Pipeline Architecture: Airflow (Bronze) → dbt Cloud (Silver/Gold) → Data Marts}
+%   \label{fig:pipeline-overview}
+% \end{figure}
+
+\subsection{Infrastructure Setup}
+The pipeline was deployed on Google Cloud Platform (GCP) using:
+\begin{itemize}
+  \item \textbf{Cloud Composer}: Managed Apache Airflow environment for orchestration
+  \item \textbf{Cloud SQL (Postgres)}: Data warehouse storage with Bronze, Silver, Gold, and Snapshots schemas
+  \item \textbf{dbt Cloud}: Data transformation platform for Silver and Gold layer processing
+  \item \textbf{Cloud Storage}: Data lake for raw CSV files
+\end{itemize}
+
+\subsection{Data Sources and Volume}
+The pipeline processes multiple data sources with the following volumes:
+
+\begin{table}[H]
+  \centering
+  \caption{Data sources and volumes processed by the pipeline}
+  \label{tab:data-sources}
+  \begin{tabularx}{\textwidth}{l r r l}
+    \hline
+    \textbf{Data Source} & \textbf{Rows} & \textbf{Columns} & \textbf{Description} \\
+    \hline
+    Airbnb Listings (12 months) & 37,562 & 22 & Sydney rental properties \\
+    Census G01 (Demographics) & 132 & 109 & Person characteristics by LGA \\
+    Census G02 (Medians) & 132 & 9 & Medians and averages by LGA \\
+    LGA-Suburb Mapping & 4,470 & 2 & LGA names to suburb names mapping \\
+    NSW LGA Reference & 129 & 2 & LGA codes and names reference data \\
+    \hline
+  \end{tabularx}
+\end{table}
+
+\subsection{Airflow DAG Implementation (Part 1)}
+The Airflow DAG (\texttt{dag\_part1\_raw\_load.py}) implements a robust data loading pipeline with the following key features:
+
+\subsubsection{DAG Configuration}
+\begin{itemize}
+  \item \textbf{Schedule}: Manual trigger (\texttt{schedule\_interval=None})
+  \item \textbf{Concurrency}: Limited to prevent resource conflicts (\texttt{max\_active\_runs=1})
+  \item \textbf{Retry Logic}: 2 retries with 5-minute delays
+  \item \textbf{Error Handling}: Email notifications on failure
+\end{itemize}
+
+\subsubsection{Data Loading Process}
+The DAG performs the following operations:
+\begin{enumerate}
+  \item \textbf{File Detection}: Scans Cloud Storage for CSV files in \texttt{/listings/}, \texttt{/census/}, and \texttt{/dimensions/} directories
+  \item \textbf{Data Validation}: Checks file integrity and format using pandas
+  \item \textbf{Bronze Layer Loading}: Loads raw data into Postgres Bronze schema tables
+  \item \textbf{Data Quality Checks}: Validates row counts and data completeness
+  \item \textbf{dbt Trigger}: Optionally triggers dbt Cloud job for transformations
+\end{enumerate}
+
+\subsubsection{Bronze Layer Tables Created}
+The Airflow DAG creates the following Bronze layer tables:
+\begin{itemize}
+  \item \texttt{raw\_airbnb\_listings}: Raw Airbnb property data (37,562 rows)
+  \item \texttt{raw\_census\_g01}: Raw demographic characteristics (132 rows)
+  \item \texttt{raw\_census\_g02}: Raw median/average data (132 rows)
+  \item \texttt{raw\_lga\_mapping}: Raw suburb-LGA mapping (4,470 rows)
+  \item \texttt{raw\_nsw\_lga\_code}: Raw LGA codes (129 rows)
+\end{itemize}
+
+\subsection{dbt Cloud Implementation (Part 2)}
+The dbt project implements a complete medallion architecture with proper data modeling practices.
+
+\subsubsection{Bronze Layer Models}
+Raw data tables stored as-is from Airflow:
+\begin{itemize}
+  \item \texttt{bronze\_airbnb\_listings}: Direct reference to raw Airbnb data
+  \item \texttt{bronze\_census\_g01}: Direct reference to raw demographic data
+  \item \texttt{bronze\_census\_g02}: Direct reference to raw median/average data
+  \item \texttt{bronze\_lga\_mapping}: Direct reference to raw suburb-LGA mapping
+  \item \texttt{bronze\_nsw\_lga\_code}: Direct reference to raw LGA codes
+\end{itemize}
+
+\subsubsection{Silver Layer Models}
+Cleaned and standardized data with consistent naming conventions:
+\begin{itemize}
+  \item \texttt{silver\_airbnb\_listings}: Cleaned Airbnb data with standardized types
+  \item \texttt{silver\_census\_g01}: Cleaned demographic data with proper data types
+  \item \texttt{silver\_census\_g02}: Cleaned median/average data
+  \item \texttt{silver\_lga\_mapping}: Cleaned suburb-LGA mapping with validation
+  \item \texttt{silver\_nsw\_lga\_code}: Cleaned LGA codes with proper formatting
+\end{itemize}
+
+\textbf{Key Transformations Applied:}
+\begin{itemize}
+  \item Data type standardization (dates, numeric fields)
+  \item Consistent naming conventions (\texttt{\_clean} suffix)
+  \item Data enrichment with calculated fields
+  \item Quality validation and completeness checks
+\end{itemize}
+
+\subsubsection{Gold Layer - Star Schema}
+Business-ready dimension and fact tables:
+
+\textbf{Dimension Tables:}
+\begin{itemize}
+  \item \texttt{dim\_host}: Host information with SCD Type 2 implementation
+  \item \texttt{dim\_neighbourhood}: Neighbourhood details and geographic information
+  \item \texttt{dim\_property}: Property characteristics and amenities
+  \item \texttt{dim\_lga}: Local Government Area information with Census integration
+  \item \texttt{dim\_suburb}: Suburb-level details with LGA mappings
+\end{itemize}
+
+\textbf{Fact Table:}
+\begin{itemize}
+  \item \texttt{fact\_listings}: Core business metrics with foreign keys to dimensions
+\end{itemize}
+
+\subsection{Data Marts (Part 2)}
+Three analytical views implementing business requirements:
+
+\subsubsection{dm\_listing\_neighbourhood}
+Provides insights per listing neighbourhood and month/year:
+\begin{itemize}
+  \item Active listings rate
+  \item Price statistics (min, max, median, average)
+  \item Host metrics (distinct hosts, superhost rate)
+  \item Review scores and percentage changes
+  \item Revenue calculations and stay metrics
+\end{itemize}
+
+\subsubsection{dm\_property\_type}
+Analyzes performance by property characteristics:
+\begin{itemize}
+  \item Grouped by property\_type, room\_type, accommodates
+  \item Same metrics as listing neighbourhood view
+  \item Temporal analysis by month/year
+\end{itemize}
+
+\subsubsection{dm\_host\_neighbourhood}
+Host-focused analysis by LGA:
+\begin{itemize}
+  \item Distinct host counts
+  \item Estimated revenue calculations
+  \item Revenue per host metrics
+\end{itemize}
+
+\subsection{Data Quality and Testing}
+The dbt project includes thorough data quality testing:
+
+\begin{itemize}
+  \item \textbf{Source Tests}: Not null and unique constraints on key fields
+  \item \textbf{Model Tests}: Referential integrity and data completeness
+  \item \textbf{Custom Tests}: Business rule validation
+  \item \textbf{Documentation}: Complete model documentation and metadata
+\end{itemize}
+
+\subsection{Current Implementation Status}
+\begin{itemize}
+  \item \textbf{Bronze Layer}: Complete with all raw data tables loaded
+  \item \textbf{Silver Layer}: Complete with cleaned and standardized data
+  \item \textbf{Gold Layer}: Complete with star schema implementation
+  \item \textbf{Data Marts}: Complete with all three required analytical views
+  \item \textbf{Data Quality}: Thorough testing and validation implemented
+\end{itemize}
+
+The pipeline is ready for Part 3 (sequential monthly processing) and Part 4 (ad-hoc business analysis).

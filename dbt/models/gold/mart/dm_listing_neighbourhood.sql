@@ -20,8 +20,8 @@ with fact_with_dimensions as (
         f.host_is_superhost,
         f.review_scores_rating,
         -- Use SCD Type 2 logic to get correct dimension values at point in time
-        d.listing_neighbourhood,
-        d.host_neighbourhood
+        coalesce(d.listing_neighbourhood, 'UNKNOWN') as listing_neighbourhood,
+        coalesce(d.host_neighbourhood, 'UNKNOWN') as host_neighbourhood
     from {{ ref('fact_listings') }} f
     left join {{ ref('dim_neighbourhood') }} d
         on f.neighbourhood_key = d.neighbourhood_key
@@ -74,7 +74,6 @@ monthly_metrics as (
             2
         ) as avg_estimated_revenue_per_active_listing
     from fact_with_dimensions
-    where listing_neighbourhood is not null
     group by listing_neighbourhood, scraped_year, scraped_month
 ),
 

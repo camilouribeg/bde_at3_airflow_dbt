@@ -1,0 +1,7 @@
+,avg_revenue_per_active_listing,avg_revenue_per_active_listing,avg_revenue_per_active_listing,median_age_persons
+,count,mean,std,mean
+age_group,,,,
+Young (≤35),7,4221.02,1404.95,33.43
+Middle (36-40),7,5797.91,2754.56,37.29
+Mature (41-45),2,11196.47,1365.75,42.5
+Senior (45+),0,,,

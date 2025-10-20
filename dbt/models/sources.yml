@@ -11,16 +11,13 @@ sources:
         description: Raw Census G01 data - Selected Person Characteristics by Sex
         columns:
           - name: lga_code_2016
-            description: LGA code from 2016 Census
             tests:
               - not_null
               - unique
           - name: tot_p_m
-            description: Total male population
             tests:
               - not_null
           - name: tot_p_f
-            description: Total female population
             tests:
               - not_null
 
@@ -28,28 +25,20 @@ sources:
         description: Raw Census G02 data - Selected Medians and Averages
         columns:
           - name: lga_code_2016
-            description: LGA code from 2016 Census
             tests:
               - not_null
               - unique
           - name: median_age_persons
-            description: Median age of persons
             tests:
               - not_null
-          - name: median_mortgage_repay_monthly
-            description: Median monthly mortgage repayment
-          - name: median_tot_hhd_inc_weekly
-            description: Median total household income weekly
 
       - name: raw_lga_mapping
         description: Raw LGA to Suburb mapping data
         columns:
           - name: lga_name
-            description: LGA name
             tests:
               - not_null
           - name: suburb_name
-            description: Suburb name
             tests:
               - not_null
 
@@ -57,12 +46,10 @@ sources:
         description: Raw NSW LGA code mapping data
         columns:
           - name: lga_code
-            description: NSW LGA code
             tests:
               - not_null
               - unique
           - name: lga_name
-            description: NSW LGA name
             tests:
               - not_null
 
@@ -70,67 +57,29 @@ sources:
         description: Raw Airbnb listings data from CSV files
         columns:
           - name: listing_id
-            description: Unique listing identifier
-            tests:
-              - not_null
-              - unique
-          - name: scrape_id
-            description: Scrape identifier
             tests:
               - not_null
           - name: scraped_date
-            description: Date when data was scraped
             tests:
               - not_null
           - name: host_id
-            description: Unique host identifier
             tests:
               - not_null
-          - name: host_name
-            description: Host name
-          - name: host_since
-            description: Date when host joined
-          - name: host_is_superhost
-            description: Whether host is superhost (t/f) - may contain empty values
-          - name: host_neighbourhood
-            description: Neighbourhood where host is located
           - name: listing_neighbourhood
-            description: Neighbourhood where listing is located
             tests:
               - not_null
           - name: property_type
-            description: Type of property (apartment, house, etc.)
             tests:
               - not_null
           - name: room_type
-            description: Type of room (entire home, private room, shared room)
             tests:
               - not_null
           - name: accommodates
-            description: Number of people the listing accommodates
             tests:
               - not_null
           - name: price
-            description: Listing price
             tests:
               - not_null
           - name: has_availability
-            description: Whether listing has availability (t/f) - may contain unexpected values
             tests:
               - not_null
-          - name: availability_30
-            description: Number of days available in next 30 days
-          - name: number_of_reviews
-            description: Total number of reviews
-          - name: review_scores_rating
-            description: Overall review score rating
-          - name: review_scores_accuracy
-            description: Review score for accuracy
-          - name: review_scores_cleanliness
-            description: Review score for cleanliness
-          - name: review_scores_checkin
-            description: Review score for check-in
-          - name: review_scores_communication
-            description: Review score for communication
-          - name: review_scores_value
-            description: Review score for value

@@ -1,0 +1,112 @@
+% UTS Report Template (styled, modular) — Assignment 2
+% Compile with XeLaTeX or LuaLaTeX
+
+\documentclass[12pt]{article}
+
+% ===== Fonts =====
+\usepackage{fontspec}
+\setmainfont{Arial}
+
+% ===== Language & graphics =====
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{float}
+\usepackage{svg}
+\usepackage{adjustbox}
+
+% ===== Tables =====
+\usepackage{longtable}
+\usepackage{ltablex}
+\usepackage{tabularx}
+\renewcommand{\arraystretch}{1.1}
+
+% ===== Layout =====
+\usepackage[a4paper, left=2.8cm, right=2.8cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{parskip}
+\usepackage{ragged2e}
+\usepackage{changepage}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{sectsty}
+\setlength{\headheight}{15pt}
+
+% ===== TikZ (optional diagrams) =====
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+
+% ===== Colors & links =====
+\usepackage{xcolor}
+\definecolor{utsblue}{HTML}{003088}
+\sectionfont{\color{utsblue}}
+\subsectionfont{\color{utsblue}}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=utsblue,
+    urlcolor=utsblue,
+    citecolor=utsblue
+}
+
+% ===== Numbering depth =====
+\setcounter{secnumdepth}{3}
+
+% ===== Report meta =====
+\newcommand{\subjectcode}{32145 - Big Data Engineering}
+\newcommand{\coursename}{Master of Data Science and Innovation}
+\newcommand{\studentname}{Camilo Andrés Uribe Guerra}
+\newcommand{\studentid}{25416518}
+
+% ===== Title =====
+\title{
+  \textcolor{utsblue}{Assignment 3. – Airbnb Census Analysis}\\[6pt]
+  {\Large \textcolor{utsblue}{Building ELT Data Pipelines with Airflow and dbt}}\\[10pt]
+  {\large \textcolor{utsblue}{Handover Report}}
+}
+
+\makeatletter
+\let\thetitle\@title
+\makeatother
+
+% ===== Header / footer =====
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Assignment 3 – Airbnb Census Analysis}
+\rhead{\subjectcode}
+\cfoot{\thepage}
+
+\begin{document}
+
+% ===== Title Page =====
+\begin{titlepage}
+  \centering
+  \vspace*{0.5 cm}
+  \includegraphics[scale=0.3]{UTS_logo.png}\\[1.0 cm]
+  {\scshape\Large \textcolor{utsblue}{\coursename}\\[0.4 cm]}
+  {\scshape\large \textcolor{utsblue}{\subjectcode}\\[1.5 cm]}
+
+  \rule{\linewidth}{0.2 mm} \\[0.4 cm]
+  {\huge \bfseries \textcolor{utsblue}{\thetitle}}\\
+  \rule{\linewidth}{0.2 mm} \\[1.5 cm]
+
+  {\large \textbf{\studentname}\\Student ID: \studentid}\\[2 cm]
+
+  {\large Spring 2025}\\[2 cm]
+  \vfill
+\end{titlepage}
+
+% ===== TOC =====
+\tableofcontents
+\newpage
+
+% ===== Sections =====
+\input{sections/1_introduction}
+\input{sections/2_data_ingestion}
+\input{sections/3_business_question}
+\input{sections/4_business_questions}
+\input{sections/6_issues_solutions}
+\input{sections/7_conclusion}
+\input{sections/appendix}
+
+\end{document}

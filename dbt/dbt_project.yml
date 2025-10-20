@@ -28,19 +28,23 @@ clean-targets:
 
 models:
   airbnb_census_dw:
-    # Config indicated by + and applies to all files under models/example/
+    # Bronze layer - raw data tables
     bronze:
       +materialized: table
       +schema: bronze
+    # Silver layer - cleaned and validated data
     silver:
       +materialized: table
       +schema: silver
+    # Gold layer - business-ready data
     gold:
       +materialized: table
       +schema: gold
+      # Star schema dimension and fact tables
       star:
         +materialized: table
         +schema: gold
+      # Mart tables - business intelligence views
       mart:
         +materialized: view
         +schema: gold
@@ -52,16 +56,6 @@ snapshots:
     +unique_key: id
     +strategy: timestamp
     +updated_at: updated_at
-
-# Configuring seeds
-seeds:
-  airbnb_census_dw:
-    +schema: seeds
-
-# Configuring tests
-tests:
-  airbnb_census_dw:
-    +schema: test_results
 
 # Configuring variables
 vars:

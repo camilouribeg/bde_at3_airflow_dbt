@@ -1,0 +1,7 @@
+lga_name,performance_group,avg_revenue_per_active_listing,median_age_persons,male_percentage,median_tot_hhd_inc_annual,median_mortgage_repay_annual,mortgage_to_income_ratio_pct
+Mosman,TOP_3,"$12,162",42.0,46.31,"$131,144","$36,000",27.45
+Hunters Hill,TOP_3,"$10,231",43.0,49.9,"$128,284","$36,396",28.37
+Woollahra,TOP_3,"$10,007",39.0,46.52,"$139,724","$38,400",27.48
+Burwood,BOTTOM_3,"$3,237",33.0,48.31,"$81,588","$26,400",32.36
+Hornsby,BOTTOM_3,"$2,535",40.0,48.81,"$110,292","$28,800",26.11
+Liverpool,BOTTOM_3,"$2,175",33.0,49.6,"$80,600","$25,476",31.61

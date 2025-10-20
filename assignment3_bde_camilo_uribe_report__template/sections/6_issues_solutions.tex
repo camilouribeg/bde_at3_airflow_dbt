@@ -1,0 +1,67 @@
+\section{Technical Issues and Solutions}
+
+During the implementation of the ELT pipeline, several technical challenges were encountered and resolved. The main issues and their solutions are summarized below:
+
+\subsection{Data Pipeline Challenges}
+
+\begin{itemize}
+  \item \textbf{Surrogate Key Mismatch:} Initially, the fact table used MD5 hash-based surrogate keys while dimension tables used concatenated string keys, causing join failures in mart tables. The solution was to standardize on concatenated string keys across all tables, ensuring referential integrity.
+  
+  \item \textbf{Snapshot Explosion:} The LGA snapshot experienced significant row explosion (9:1 ratio) due to frequent changes in census data. While this was manageable, we implemented monitoring to track snapshot growth and considered optimizing the snapshot strategy for better performance.
+  
+  \item \textbf{Missing Dimension Table:} The \texttt{dim\_lga} table was referenced in mart queries but not created, causing runtime errors. We created the missing dimension table with proper SCD Type 2 implementation and census data integration.
+  
+  \item \textbf{Airflow DAG Complexity:} The initial DAG design was overly complex with too many dependencies. We simplified the workflow by breaking it into focused tasks and implementing proper error handling and retry logic.
+\end{itemize}
+
+\subsection{dbt Cloud Integration Issues}
+
+\begin{itemize}
+  \item \textbf{Schema Management:} Initial confusion about schema naming conventions led to inconsistent table locations. We standardized on separate schemas for each medallion layer (bronze, silver, gold, snapshots) with clear naming conventions.
+  
+  \item \textbf{Model Dependencies:} Complex dependency chains caused build failures when models were run out of order. We implemented proper model dependencies using dbt's ref() function and organized models into logical folders.
+  
+  \item \textbf{Data Type Inconsistencies:} Different data types between Bronze and Silver layers caused transformation failures. We implemented comprehensive data type standardization in the Silver layer with proper validation.
+  
+  \item \textbf{SCD Type 2 Implementation:} Initial snapshot implementation didn't properly handle historical changes. We refined the timestamp-based snapshot strategy with proper valid\_from/valid\_to fields and is\_current flags.
+\end{itemize}
+
+\subsection{Data Quality and Performance Issues}
+
+\begin{itemize}
+  \item \textbf{Data Completeness:} Some Census LGA codes didn't have corresponding Airbnb data, causing join issues. We implemented left joins with proper null handling and data validation checks.
+  
+  \item \textbf{Query Performance:} Initial mart table queries were slow due to complex joins and aggregations. We optimized queries by adding strategic indexes and simplifying join logic where possible.
+  
+  \item \textbf{Memory Constraints:} Large dataset processing in dbt Cloud occasionally hit memory limits. We implemented incremental processing strategies and optimized query patterns.
+  
+  \item \textbf{Data Validation:} Ensuring data quality across all layers required comprehensive testing. We implemented dbt tests for data completeness, referential integrity, and business rule validation.
+\end{itemize}
+
+\subsection{Infrastructure and Deployment Issues}
+
+\begin{itemize}
+  \item \textbf{GCP Connectivity:} Initial connection issues between Cloud Composer and Cloud SQL required proper network configuration and firewall rules. We configured VPC peering and security groups correctly.
+  
+  \item \textbf{dbt Cloud API Integration:} Triggering dbt jobs from Airflow required proper API authentication and error handling. We implemented robust API integration with retry logic and status monitoring.
+  
+  \item \textbf{File Upload Management:} Managing large CSV files in Cloud Storage required proper chunking and error handling. We implemented streaming uploads with progress monitoring and retry mechanisms.
+  
+  \item \textbf{Environment Configuration:} Different environments (development vs production) required careful configuration management. We implemented environment-specific variables and proper secret management.
+\end{itemize}
+
+\subsection{Solutions Implemented}
+
+\begin{itemize}
+  \item \textbf{Standardized Architecture:} Implemented consistent naming conventions, data types, and schema organization across all layers.
+  
+  \item \textbf{Comprehensive Testing:} Added data quality tests, referential integrity checks, and business rule validation throughout the pipeline.
+  
+  \item \textbf{Error Handling:} Implemented robust error handling, retry logic, and monitoring across Airflow DAGs and dbt models.
+  
+  \item \textbf{Performance Optimization:} Added strategic indexing, query optimization, and incremental processing where appropriate.
+  
+  \item \textbf{Documentation:} Created comprehensive documentation for all models, transformations, and business logic.
+\end{itemize}
+
+Overall, these solutions ensured that the ELT pipeline was stable, scalable, and met all assignment requirements while maintaining data quality and performance standards.

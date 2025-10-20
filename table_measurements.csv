@@ -1,0 +1,223 @@
+timestamp,schema,table,row_count,run_phase,error
+2025-10-19 16:06:24,bronze,raw_airbnb_listings,37562,BEFORE_AIRFLOW,
+2025-10-19 16:06:24,bronze,raw_census_g01,132,BEFORE_AIRFLOW,
+2025-10-19 16:06:24,bronze,raw_census_g02,132,BEFORE_AIRFLOW,
+2025-10-19 16:06:24,bronze,raw_lga_mapping,4470,BEFORE_AIRFLOW,
+2025-10-19 16:06:24,bronze,raw_nsw_lga_code,129,BEFORE_AIRFLOW,
+2025-10-19 16:06:24,silver,silver_airbnb_listings,0,BEFORE_AIRFLOW,"Execution failed on sql 'SELECT COUNT(*) as count FROM silver.silver_airbnb_listings': relation ""silver.silver_airbnb_listings"" does not exist
+LINE 1: SELECT COUNT(*) as count FROM silver.silver_airbnb_listings
+                                      ^
+"
+2025-10-19 16:06:24,silver,silver_census_g01,0,BEFORE_AIRFLOW,"Execution failed on sql 'SELECT COUNT(*) as count FROM silver.silver_census_g01': relation ""silver.silver_census_g01"" does not exist
+LINE 1: SELECT COUNT(*) as count FROM silver.silver_census_g01
+                                      ^
+"
+2025-10-19 16:06:24,silver,silver_census_g02,0,BEFORE_AIRFLOW,"Execution failed on sql 'SELECT COUNT(*) as count FROM silver.silver_census_g02': relation ""silver.silver_census_g02"" does not exist
+LINE 1: SELECT COUNT(*) as count FROM silver.silver_census_g02
+                                      ^
+"
+2025-10-19 16:06:24,silver,silver_lga_mapping,0,BEFORE_AIRFLOW,"Execution failed on sql 'SELECT COUNT(*) as count FROM silver.silver_lga_mapping': relation ""silver.silver_lga_mapping"" does not exist
+LINE 1: SELECT COUNT(*) as count FROM silver.silver_lga_mapping
+                                      ^
+"
+2025-10-19 16:06:24,silver,silver_nsw_lga_code,0,BEFORE_AIRFLOW,"Execution failed on sql 'SELECT COUNT(*) as count FROM silver.silver_nsw_lga_code': relation ""silver.silver_nsw_lga_code"" does not exist
+LINE 1: SELECT COUNT(*) as count FROM silver.silver_nsw_lga_code
+                                      ^
+"
+2025-10-19 16:06:24,gold,dim_host,0,BEFORE_AIRFLOW,"Execution failed on sql 'SELECT COUNT(*) as count FROM gold.dim_host': relation ""gold.dim_host"" does not exist
+LINE 1: SELECT COUNT(*) as count FROM gold.dim_host
+                                      ^
+"
+2025-10-19 16:06:24,gold,dim_neighbourhood,0,BEFORE_AIRFLOW,"Execution failed on sql 'SELECT COUNT(*) as count FROM gold.dim_neighbourhood': relation ""gold.dim_neighbourhood"" does not exist
+LINE 1: SELECT COUNT(*) as count FROM gold.dim_neighbourhood
+                                      ^
+"
+2025-10-19 16:06:24,gold,dim_property,0,BEFORE_AIRFLOW,"Execution failed on sql 'SELECT COUNT(*) as count FROM gold.dim_property': relation ""gold.dim_property"" does not exist
+LINE 1: SELECT COUNT(*) as count FROM gold.dim_property
+                                      ^
+"
+2025-10-19 16:06:24,gold,dim_lga,0,BEFORE_AIRFLOW,"Execution failed on sql 'SELECT COUNT(*) as count FROM gold.dim_lga': relation ""gold.dim_lga"" does not exist
+LINE 1: SELECT COUNT(*) as count FROM gold.dim_lga
+                                      ^
+"
+2025-10-19 16:06:24,gold,dim_suburb,0,BEFORE_AIRFLOW,"Execution failed on sql 'SELECT COUNT(*) as count FROM gold.dim_suburb': relation ""gold.dim_suburb"" does not exist
+LINE 1: SELECT COUNT(*) as count FROM gold.dim_suburb
+                                      ^
+"
+2025-10-19 16:06:24,gold,fact_listings,0,BEFORE_AIRFLOW,"Execution failed on sql 'SELECT COUNT(*) as count FROM gold.fact_listings': relation ""gold.fact_listings"" does not exist
+LINE 1: SELECT COUNT(*) as count FROM gold.fact_listings
+                                      ^
+"
+2025-10-19 16:06:24,gold,dm_host_neighbourhood,0,BEFORE_AIRFLOW,"Execution failed on sql 'SELECT COUNT(*) as count FROM gold.dm_host_neighbourhood': relation ""gold.dm_host_neighbourhood"" does not exist
+LINE 1: SELECT COUNT(*) as count FROM gold.dm_host_neighbourhood
+                                      ^
+"
+2025-10-19 16:06:24,gold,dm_listing_neighbourhood,0,BEFORE_AIRFLOW,"Execution failed on sql 'SELECT COUNT(*) as count FROM gold.dm_listing_neighbourhood': relation ""gold.dm_listing_neighbourhood"" does not exist
+LINE 1: SELECT COUNT(*) as count FROM gold.dm_listing_neighbourhood
+                                      ^
+"
+2025-10-19 16:06:24,gold,dm_property_type,0,BEFORE_AIRFLOW,"Execution failed on sql 'SELECT COUNT(*) as count FROM gold.dm_property_type': relation ""gold.dm_property_type"" does not exist
+LINE 1: SELECT COUNT(*) as count FROM gold.dm_property_type
+                                      ^
+"
+2025-10-19 16:06:24,snapshots,dim_host_snapshot,27273,BEFORE_AIRFLOW,
+2025-10-19 16:06:24,snapshots,dim_neighbourhood_snapshot,848,BEFORE_AIRFLOW,
+2025-10-19 16:06:24,snapshots,dim_property_snapshot,412,BEFORE_AIRFLOW,
+2025-10-19 16:06:32,public_bronze,raw_airbnb_listings,0,BEFORE_AIRFLOW,"Execution failed on sql 'SELECT COUNT(*) as count FROM public_bronze.raw_airbnb_listings': relation ""public_bronze.raw_airbnb_listings"" does not exist
+LINE 1: SELECT COUNT(*) as count FROM public_bronze.raw_airbnb_listi...
+                                      ^
+"
+2025-10-19 16:06:32,public_silver,silver_airbnb_listings,37562,BEFORE_AIRFLOW,
+2025-10-19 16:06:32,public_silver,silver_census_g01,132,BEFORE_AIRFLOW,
+2025-10-19 16:06:32,public_silver,silver_census_g02,130,BEFORE_AIRFLOW,
+2025-10-19 16:06:32,public_silver,silver_lga_mapping,4470,BEFORE_AIRFLOW,
+2025-10-19 16:06:32,public_silver,silver_nsw_lga_code,129,BEFORE_AIRFLOW,
+2025-10-19 16:06:32,public_gold,dim_host,27273,BEFORE_AIRFLOW,
+2025-10-19 16:06:32,public_gold,dim_neighbourhood,848,BEFORE_AIRFLOW,
+2025-10-19 16:06:32,public_gold,dim_property,412,BEFORE_AIRFLOW,
+2025-10-19 16:06:32,public_gold,dim_lga,129,BEFORE_AIRFLOW,
+2025-10-19 16:06:32,public_gold,dim_suburb,4470,BEFORE_AIRFLOW,
+2025-10-19 16:06:32,public_gold,fact_listings,37562,BEFORE_AIRFLOW,
+2025-10-19 16:06:32,public_gold,dm_host_neighbourhood,28,BEFORE_AIRFLOW,
+2025-10-19 16:06:32,public_gold,dm_listing_neighbourhood,29,BEFORE_AIRFLOW,
+2025-10-19 16:06:32,public_gold,dm_property_type,412,BEFORE_AIRFLOW,
+2025-10-19 17:32:53,bronze,raw_airbnb_listings,74463,CURRENT_STATUS,
+2025-10-19 17:32:53,bronze,raw_census_g01,132,CURRENT_STATUS,
+2025-10-19 17:32:53,bronze,raw_census_g02,132,CURRENT_STATUS,
+2025-10-19 17:32:53,bronze,raw_lga_mapping,4470,CURRENT_STATUS,
+2025-10-19 17:32:53,bronze,raw_nsw_lga_code,129,CURRENT_STATUS,
+2025-10-19 17:32:53,public_silver,silver_airbnb_listings,74463,CURRENT_STATUS,
+2025-10-19 17:32:53,public_silver,silver_census_g01,132,CURRENT_STATUS,
+2025-10-19 17:32:53,public_silver,silver_census_g02,130,CURRENT_STATUS,
+2025-10-19 17:32:53,public_silver,silver_lga_mapping,4470,CURRENT_STATUS,
+2025-10-19 17:32:53,public_silver,silver_nsw_lga_code,129,CURRENT_STATUS,
+2025-10-19 17:32:53,public_gold,dim_host,27639,CURRENT_STATUS,
+2025-10-19 17:32:53,public_gold,dim_neighbourhood,887,CURRENT_STATUS,
+2025-10-19 17:32:53,public_gold,dim_property,422,CURRENT_STATUS,
+2025-10-19 17:32:53,public_gold,dim_lga,129,CURRENT_STATUS,
+2025-10-19 17:32:53,public_gold,dim_suburb,4470,CURRENT_STATUS,
+2025-10-19 17:32:53,public_gold,fact_listings,74463,CURRENT_STATUS,
+2025-10-19 17:32:53,public_gold,dm_host_neighbourhood,51,CURRENT_STATUS,
+2025-10-19 17:32:53,public_gold,dm_listing_neighbourhood,52,CURRENT_STATUS,
+2025-10-19 17:32:54,public_gold,dm_property_type,422,CURRENT_STATUS,
+2025-10-19 17:47:58,bronze,raw_airbnb_listings,110520,AFTER_JULY_LOAD,
+2025-10-19 17:47:58,public_silver,silver_airbnb_listings,74463,AFTER_JULY_LOAD,
+2025-10-19 17:47:58,public_gold,fact_listings,74463,AFTER_JULY_LOAD,
+2025-10-19 17:47:58,public_gold,dm_host_neighbourhood,51,AFTER_JULY_LOAD,
+2025-10-19 17:47:58,public_gold,dm_listing_neighbourhood,52,AFTER_JULY_LOAD,
+2025-10-19 17:47:58,public_gold,dm_property_type,422,AFTER_JULY_LOAD,
+2025-10-19 17:53:10,bronze,raw_airbnb_listings,110520,FINAL_AFTER_DBT,
+2025-10-19 17:53:10,public_silver,silver_airbnb_listings,110520,FINAL_AFTER_DBT,
+2025-10-19 17:53:10,public_gold,fact_listings,110520,FINAL_AFTER_DBT,
+2025-10-19 17:53:10,public_gold,dim_host,28034,FINAL_AFTER_DBT,
+2025-10-19 17:53:10,public_gold,dim_neighbourhood,951,FINAL_AFTER_DBT,
+2025-10-19 17:53:10,public_gold,dim_property,617,FINAL_AFTER_DBT,
+2025-10-19 17:53:10,public_gold,dim_lga,129,FINAL_AFTER_DBT,
+2025-10-19 17:53:10,public_gold,dim_suburb,4470,FINAL_AFTER_DBT,
+2025-10-19 17:53:10,public_gold,dm_host_neighbourhood,96,FINAL_AFTER_DBT,
+2025-10-19 17:53:10,public_gold,dm_listing_neighbourhood,106,FINAL_AFTER_DBT,
+2025-10-19 17:53:10,public_gold,dm_property_type,617,FINAL_AFTER_DBT,
+2025-10-19 18:01:49,bronze,raw_airbnb_listings,141911,AFTER_AUGUST_AIRFLOW,
+2025-10-19 18:05:45,bronze,raw_airbnb_listings,141911,FINAL_AFTER_AUGUST_DBT,
+2025-10-19 18:05:46,public_silver,silver_airbnb_listings,141911,FINAL_AFTER_AUGUST_DBT,
+2025-10-19 18:05:46,public_gold,fact_listings,141911,FINAL_AFTER_AUGUST_DBT,
+2025-10-19 18:05:46,public_gold,dim_host,28463,FINAL_AFTER_AUGUST_DBT,
+2025-10-19 18:05:46,public_gold,dim_neighbourhood,976,FINAL_AFTER_AUGUST_DBT,
+2025-10-19 18:05:46,public_gold,dim_property,800,FINAL_AFTER_AUGUST_DBT,
+2025-10-19 18:05:46,public_gold,dim_lga,129,FINAL_AFTER_AUGUST_DBT,
+2025-10-19 18:05:46,public_gold,dim_suburb,4470,FINAL_AFTER_AUGUST_DBT,
+2025-10-19 18:05:46,public_gold,dm_host_neighbourhood,120,FINAL_AFTER_AUGUST_DBT,
+2025-10-19 18:05:46,public_gold,dm_listing_neighbourhood,132,FINAL_AFTER_AUGUST_DBT,
+2025-10-19 18:05:46,public_gold,dm_property_type,800,FINAL_AFTER_AUGUST_DBT,
+2025-10-19 18:26:45,bronze,raw_airbnb_listings,211569,AFTER_SEPTEMBER_AIRFLOW,
+2025-10-19 18:33:18,bronze,raw_airbnb_listings,211569,FINAL_AFTER_SEPTEMBER_DBT,
+2025-10-19 18:33:18,public_silver,silver_airbnb_listings,211569,FINAL_AFTER_SEPTEMBER_DBT,
+2025-10-19 18:33:18,public_gold,fact_listings,211569,FINAL_AFTER_SEPTEMBER_DBT,
+2025-10-19 18:33:18,public_gold,dim_host,28701,FINAL_AFTER_SEPTEMBER_DBT,
+2025-10-19 18:33:18,public_gold,dim_neighbourhood,993,FINAL_AFTER_SEPTEMBER_DBT,
+2025-10-19 18:33:18,public_gold,dim_property,807,FINAL_AFTER_SEPTEMBER_DBT,
+2025-10-19 18:33:18,public_gold,dim_lga,129,FINAL_AFTER_SEPTEMBER_DBT,
+2025-10-19 18:33:18,public_gold,dim_suburb,4470,FINAL_AFTER_SEPTEMBER_DBT,
+2025-10-19 18:33:18,public_gold,dm_host_neighbourhood,115,FINAL_AFTER_SEPTEMBER_DBT,
+2025-10-19 18:33:19,public_gold,dm_listing_neighbourhood,120,FINAL_AFTER_SEPTEMBER_DBT,
+2025-10-19 18:33:19,public_gold,dm_property_type,807,FINAL_AFTER_SEPTEMBER_DBT,
+2025-10-19 19:24:04,bronze,raw_airbnb_listings,245845,FINAL_AFTER_COMPLETE_DBT,
+2025-10-19 19:24:04,public_silver,silver_airbnb_listings,245845,FINAL_AFTER_COMPLETE_DBT,
+2025-10-19 19:24:04,public_gold,fact_listings,245845,FINAL_AFTER_COMPLETE_DBT,
+2025-10-19 19:24:04,public_gold,dim_host,28991,FINAL_AFTER_COMPLETE_DBT,
+2025-10-19 19:24:04,public_gold,dim_neighbourhood,1013,FINAL_AFTER_COMPLETE_DBT,
+2025-10-19 19:24:04,public_gold,dim_property,810,FINAL_AFTER_COMPLETE_DBT,
+2025-10-19 19:24:04,public_gold,dim_lga,129,FINAL_AFTER_COMPLETE_DBT,
+2025-10-19 19:24:04,public_gold,dim_suburb,4470,FINAL_AFTER_COMPLETE_DBT,
+2025-10-19 19:24:04,public_gold,dm_host_neighbourhood,134,FINAL_AFTER_COMPLETE_DBT,
+2025-10-19 19:24:05,public_gold,dm_listing_neighbourhood,139,FINAL_AFTER_COMPLETE_DBT,
+2025-10-19 19:24:05,public_gold,dm_property_type,810,FINAL_AFTER_COMPLETE_DBT,
+2025-10-19 19:29:45,bronze,raw_airbnb_listings,279640,AFTER_NOVEMBER_AIRFLOW,
+2025-10-19 19:41:23,bronze,raw_airbnb_listings,279640,FINAL_AFTER_NOVEMBER_DBT,
+2025-10-19 19:41:23,public_silver,silver_airbnb_listings,279640,FINAL_AFTER_NOVEMBER_DBT,
+2025-10-19 19:41:23,public_gold,fact_listings,279640,FINAL_AFTER_NOVEMBER_DBT,
+2025-10-19 19:41:23,public_gold,dim_host,29290,FINAL_AFTER_NOVEMBER_DBT,
+2025-10-19 19:41:23,public_gold,dim_neighbourhood,1039,FINAL_AFTER_NOVEMBER_DBT,
+2025-10-19 19:41:24,public_gold,dim_property,816,FINAL_AFTER_NOVEMBER_DBT,
+2025-10-19 19:41:24,public_gold,dim_lga,129,FINAL_AFTER_NOVEMBER_DBT,
+2025-10-19 19:41:24,public_gold,dim_suburb,4470,FINAL_AFTER_NOVEMBER_DBT,
+2025-10-19 19:41:24,public_gold,dm_host_neighbourhood,155,FINAL_AFTER_NOVEMBER_DBT,
+2025-10-19 19:41:24,public_gold,dm_listing_neighbourhood,164,FINAL_AFTER_NOVEMBER_DBT,
+2025-10-19 19:41:24,public_gold,dm_property_type,816,FINAL_AFTER_NOVEMBER_DBT,
+2025-10-19 19:51:05,bronze,raw_airbnb_listings,313511,AFTER_DECEMBER_AIRFLOW,
+2025-10-19 19:58:55,bronze,raw_airbnb_listings,313511,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 19:58:55,public_silver,silver_airbnb_listings,313511,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 19:58:55,public_gold,fact_listings,313511,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 19:58:55,public_gold,dim_host,30134,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 19:58:55,public_gold,dim_neighbourhood,1059,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 19:58:55,public_gold,dim_property,829,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 19:58:55,public_gold,dim_lga,129,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 19:58:55,public_gold,dim_suburb,4470,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 19:58:55,public_gold,dm_host_neighbourhood,176,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 19:58:55,public_gold,dm_listing_neighbourhood,186,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 19:58:55,public_gold,dm_property_type,829,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 20:17:41,bronze,raw_airbnb_listings,347413,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 20:17:41,public_silver,silver_airbnb_listings,347413,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 20:17:41,public_gold,fact_listings,347413,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 20:17:41,public_gold,dim_host,30385,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 20:17:41,public_gold,dim_neighbourhood,1079,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 20:17:41,public_gold,dim_property,833,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 20:17:41,public_gold,dim_lga,129,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 20:17:41,public_gold,dim_suburb,4470,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 20:17:41,public_gold,dm_host_neighbourhood,196,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 20:17:42,public_gold,dm_listing_neighbourhood,198,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 20:17:42,public_gold,dm_property_type,833,FINAL_AFTER_DECEMBER_DBT,
+2025-10-19 20:29:04,bronze,raw_airbnb_listings,381043,AFTER_FEBRUARY_AIRFLOW,
+2025-10-19 20:32:59,bronze,raw_airbnb_listings,381043,FINAL_AFTER_FEBRUARY_DBT,
+2025-10-19 20:32:59,public_silver,silver_airbnb_listings,381043,FINAL_AFTER_FEBRUARY_DBT,
+2025-10-19 20:32:59,public_gold,fact_listings,381043,FINAL_AFTER_FEBRUARY_DBT,
+2025-10-19 20:32:59,public_gold,dim_host,30574,FINAL_AFTER_FEBRUARY_DBT,
+2025-10-19 20:32:59,public_gold,dim_neighbourhood,1083,FINAL_AFTER_FEBRUARY_DBT,
+2025-10-19 20:32:59,public_gold,dim_property,838,FINAL_AFTER_FEBRUARY_DBT,
+2025-10-19 20:32:59,public_gold,dim_lga,129,FINAL_AFTER_FEBRUARY_DBT,
+2025-10-19 20:32:59,public_gold,dim_suburb,4470,FINAL_AFTER_FEBRUARY_DBT,
+2025-10-19 20:32:59,public_gold,dm_host_neighbourhood,215,FINAL_AFTER_FEBRUARY_DBT,
+2025-10-19 20:33:00,public_gold,dm_listing_neighbourhood,211,FINAL_AFTER_FEBRUARY_DBT,
+2025-10-19 20:33:00,public_gold,dm_property_type,838,FINAL_AFTER_FEBRUARY_DBT,
+2025-10-19 21:20:40,bronze,raw_airbnb_listings,446951,FINAL_AFTER_DBT_RUN,
+2025-10-19 21:20:40,public_silver,silver_airbnb_listings,414272,FINAL_AFTER_DBT_RUN,
+2025-10-19 21:20:40,public_gold,fact_listings,414272,FINAL_AFTER_DBT_RUN,
+2025-10-19 21:20:40,public_gold,dim_host,30736,FINAL_AFTER_DBT_RUN,
+2025-10-19 21:20:40,public_gold,dim_neighbourhood,1085,FINAL_AFTER_DBT_RUN,
+2025-10-19 21:20:40,public_gold,dim_property,840,FINAL_AFTER_DBT_RUN,
+2025-10-19 21:20:40,public_gold,dim_lga,129,FINAL_AFTER_DBT_RUN,
+2025-10-19 21:20:40,public_gold,dim_suburb,4470,FINAL_AFTER_DBT_RUN,
+2025-10-19 21:20:40,public_gold,dm_host_neighbourhood,236,FINAL_AFTER_DBT_RUN,
+2025-10-19 21:20:40,public_gold,dm_listing_neighbourhood,223,FINAL_AFTER_DBT_RUN,
+2025-10-19 21:20:41,public_gold,dm_property_type,840,FINAL_AFTER_DBT_RUN,
+2025-10-19 21:27:07,bronze,raw_airbnb_listings,446951,FINAL_AFTER_APRIL_DBT,
+2025-10-19 21:27:07,public_silver,silver_airbnb_listings,446951,FINAL_AFTER_APRIL_DBT,
+2025-10-19 21:27:07,public_gold,fact_listings,446951,FINAL_AFTER_APRIL_DBT,
+2025-10-19 21:27:07,public_gold,dim_host,31001,FINAL_AFTER_APRIL_DBT,
+2025-10-19 21:27:07,public_gold,dim_neighbourhood,1093,FINAL_AFTER_APRIL_DBT,
+2025-10-19 21:27:07,public_gold,dim_property,846,FINAL_AFTER_APRIL_DBT,
+2025-10-19 21:27:07,public_gold,dim_lga,129,FINAL_AFTER_APRIL_DBT,
+2025-10-19 21:27:07,public_gold,dim_suburb,4470,FINAL_AFTER_APRIL_DBT,
+2025-10-19 21:27:07,public_gold,dm_host_neighbourhood,255,FINAL_AFTER_APRIL_DBT,
+2025-10-19 21:27:07,public_gold,dm_listing_neighbourhood,239,FINAL_AFTER_APRIL_DBT,
+2025-10-19 21:27:08,public_gold,dm_property_type,846,FINAL_AFTER_APRIL_DBT,

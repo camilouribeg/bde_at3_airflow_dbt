@@ -11,8 +11,8 @@ select
     
     -- Foreign keys to dimensions
     host_id,
-    {{ dbt_utils.generate_surrogate_key(['property_type_clean', 'room_type_clean', 'accommodates']) }} as property_key,
-    {{ dbt_utils.generate_surrogate_key(['listing_neighbourhood_clean', 'host_neighbourhood_clean']) }} as neighbourhood_key,
+    (property_type_clean || '|' || room_type_clean || '|' || accommodates) as property_key,
+    (listing_neighbourhood_clean || '|' || host_neighbourhood_clean) as neighbourhood_key,
     
     -- Metrics (as per assignment requirements)
     price_clean as price,

@@ -4,7 +4,7 @@
     target_schema='snapshots',
     unique_key='host_id',
     strategy='timestamp',
-    updated_at='scraped_date'
+    updated_at='scraped_date_clean'
   )
 }}
 with base as (
@@ -16,7 +16,7 @@ with base as (
     created_at,
     updated_at,
     row_number() over (
-      partition by host_id, scraped_date_clean
+      partition by host_id, scraped_date
       order by created_at desc, updated_at desc, listing_id
     ) as rn
   from {{ ref('silver_airbnb_listings') }}
@@ -27,7 +27,7 @@ with base as (
 ),
 -- ensure ONE row per host_id per run: keep only the latest scrape per host
 latest_per_host as (
-  select host_id, max(scraped_date) as scraped_date
+  select host_id, max(scraped_date_clean) as scraped_date
   from base
   group by host_id
 )
