@@ -1,0 +1,49 @@
+\babel@toc {english}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {section}{\numberline {2}Data Pipeline Architecture and Implementation (Parts 1-2)}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Overview}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Infrastructure Setup}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Data Sources and Volume}{3}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Airflow DAG Implementation (Part 1)}{3}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}DAG Configuration}{3}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Data Loading Process}{4}{subsubsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.3}Bronze Layer Tables Created}{4}{subsubsection.2.4.3}%
+\contentsline {subsection}{\numberline {2.5}dbt Cloud Implementation (Part 2)}{4}{subsection.2.5}%
+\contentsline {subsubsection}{\numberline {2.5.1}Bronze Layer Models}{4}{subsubsection.2.5.1}%
+\contentsline {subsubsection}{\numberline {2.5.2}Silver Layer Models}{4}{subsubsection.2.5.2}%
+\contentsline {subsubsection}{\numberline {2.5.3}Gold Layer - Star Schema}{5}{subsubsection.2.5.3}%
+\contentsline {subsection}{\numberline {2.6}Data Marts (Part 2)}{5}{subsection.2.6}%
+\contentsline {subsubsection}{\numberline {2.6.1}dm\_listing\_neighbourhood}{5}{subsubsection.2.6.1}%
+\contentsline {subsubsection}{\numberline {2.6.2}dm\_property\_type}{6}{subsubsection.2.6.2}%
+\contentsline {subsubsection}{\numberline {2.6.3}dm\_host\_neighbourhood}{6}{subsubsection.2.6.3}%
+\contentsline {subsection}{\numberline {2.7}Data Quality and Testing}{6}{subsection.2.7}%
+\contentsline {subsection}{\numberline {2.8}Current Implementation Status}{6}{subsection.2.8}%
+\contentsline {section}{\numberline {3}Sequential Data Loading Process (Part 3)}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Overview}{6}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Data Growth Monitoring}{7}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Automated Pipeline Execution}{7}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Implementation Summary}{8}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Business Questions Analysis (Part 4)}{8}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Overview}{8}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Business Questions}{8}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Question 1: Demographic Differences Analysis}{8}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}Question 2: Age-Revenue Correlation}{9}{subsubsection.4.2.2}%
+\contentsline {subsubsection}{\numberline {4.2.3}Question 3: Optimal Property Types}{10}{subsubsection.4.2.3}%
+\contentsline {subsubsection}{\numberline {4.2.4}Question 4: Multi-listing Host Distribution}{11}{subsubsection.4.2.4}%
+\contentsline {subsubsection}{\numberline {4.2.5}Question 5: Revenue vs Mortgage Coverage}{12}{subsubsection.4.2.5}%
+\contentsline {subsection}{\numberline {4.3}Summary}{12}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Technical Issues and Solutions}{12}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Data Pipeline Challenges}{12}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}dbt Cloud Integration Issues}{13}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Data Quality and Performance Issues}{13}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Infrastructure and Deployment Issues}{14}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Solutions Implemented}{14}{subsection.5.5}%
+\contentsline {section}{\numberline {6}Conclusion}{14}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Key Achievements}{14}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Technical Implementation Highlights}{15}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Current Implementation Status}{15}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Next Steps}{15}{subsection.6.4}%
+\contentsline {subsection}{\numberline {6.5}Challenges Overcome}{16}{subsection.6.5}%
+\contentsline {subsection}{\numberline {6.6}Final Assessment}{16}{subsection.6.6}%
+\contentsline {subsection}{\numberline {.1}SQL Query Screenshots}{17}{subsection.Alph0.1}%
+\contentsline {subsection}{\numberline {.2}Monthly Data Growth Analysis}{20}{subsection.Alph0.2}%

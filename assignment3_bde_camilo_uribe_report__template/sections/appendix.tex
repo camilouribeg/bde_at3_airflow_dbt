@@ -1,52 +1,92 @@
 \appendix
 \section*{Appendix}
 
-This appendix contains the SQL query outputs and screenshots referenced in Part~2 (Business Understanding). Each figure corresponds to the numbered questions.
+This appendix contains the SQL query outputs and screenshots referenced in Part 4 (Business Questions Analysis). Each figure corresponds to the numbered questions.
+
+\subsection{SQL Query Screenshots}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{images/part3_question1_screenshot.png}
-  \caption{Query results for Question 1.}
+  \includegraphics[width=0.9\textwidth]{images/question_1.1_bde_ss.png}
+  \caption{SS-1: Query results for Question 1.1 - Top/Bottom LGAs Revenue Rankings.}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{images/part3_question2_screenshot.png}
-  \caption{Query results for Question 2.}
+  \includegraphics[width=0.9\textwidth]{images/question_1.2_bde_ss.png}
+  \caption{SS-2: Query results for Question 1.2 - Demographic Analysis.}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{images/part3_question3_screenshot.png}
-  \caption{Query results for Question 3.}
+  \includegraphics[width=0.9\textwidth]{images/question_2_bdee_ss.png}
+  \caption{SS-3: Query results for Question 2 - Age vs Revenue Correlation.}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{images/part3_question4_screenshot.png}
-  \caption{Query results for Question 4.}
+  \includegraphics[width=0.9\textwidth]{images/question_3.1_bde_ss.png}
+  \caption{SS-4: Query results for Question 3.1 - Top 5 Neighbourhoods.}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{images/part3_question5_screenshot.png}
-  \caption{Query results for Question 5.}
+  \includegraphics[width=0.9\textwidth]{images/question_3.2_bde_ss.png}
+  \caption{SS-5: Query results for Question 3.2 - Best Property Type Analysis.}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{images/part3_question6_screenshot.png}
-  \caption{Query results for Question 6.}
+  \includegraphics[width=0.9\textwidth]{images/question_4_bde_ss.png}
+  \caption{SS-6: Query results for Question 4 - Host Distribution Analysis.}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{images/part3_question7_screenshot.png}
-  \caption{Query results for Question 7.}
+  \includegraphics[width=0.9\textwidth]{images/question_5.1_bde_ss.png}
+  \caption{SS-7: Query results for Question 5.1 - Overall Mortgage Coverage.}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{images/part3_question8_screenshot.png}
-  \caption{Query results for Question 8.}
+  \includegraphics[width=0.9\textwidth]{images/question_5.2_bde_ss.png}
+  \caption{SS-8: Query results for Question 5.2 - Best LGA by Coverage.}
 \end{figure}
+
+\subsection{Monthly Data Growth Analysis}
+
+Table A.1 provides detailed month-by-month data growth tracking across all pipeline layers (Bronze, Silver, Gold, Mart) during the sequential loading process from May 2020 to April 2021.
+
+\begin{table}[H]
+\centering
+\caption{Monthly Data Growth Analysis - All Pipeline Layers}
+\label{tab:monthly_growth}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Month & Bronze Layer & Silver Layer & Gold Layer & Mart Layer & Bronze Cumulative & Silver Cumulative & Gold Cumulative & Mart Cumulative \\
+\midrule
+May 2020 & 37,562 & 37,562 & 37,562 & 37,562 & 37,562 & 37,562 & 37,562 & 37,562 \\
+Jun 2020 & 36,901 & 36,901 & 36,901 & 36,901 & 74,463 & 74,463 & 74,463 & 74,463 \\
+Jul 2020 & 31,277 & 31,277 & 31,277 & 31,277 & 105,740 & 105,740 & 105,740 & 105,740 \\
+Aug 2020 & 31,391 & 31,391 & 31,391 & 31,391 & 137,131 & 137,131 & 137,131 & 137,131 \\
+Sep 2020 & 37,219 & 37,219 & 37,219 & 37,219 & 174,350 & 174,350 & 174,350 & 174,350 \\
+Oct 2020 & 34,276 & 34,276 & 34,276 & 34,276 & 208,626 & 208,626 & 208,626 & 208,626 \\
+Nov 2020 & 33,795 & 33,795 & 33,795 & 33,795 & 242,421 & 242,421 & 242,421 & 242,421 \\
+Dec 2020 & 33,871 & 33,871 & 33,871 & 33,871 & 276,292 & 276,292 & 276,292 & 276,292 \\
+Jan 2021 & 33,902 & 33,902 & 33,902 & 33,902 & 310,194 & 310,194 & 310,194 & 310,194 \\
+Feb 2021 & 33,630 & 33,630 & 33,630 & 33,630 & 343,824 & 343,824 & 343,824 & 343,824 \\
+Mar 2021 & 33,229 & 33,229 & 33,229 & 33,229 & 377,053 & 377,053 & 377,053 & 377,053 \\
+Apr 2021 & 32,679 & 32,679 & 32,679 & 32,679 & 409,732 & 409,732 & 409,732 & 409,732 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\textbf{Key Insights:}
+\begin{itemize}
+\item \textbf{Total Data Processed:} 409,732 rows across 12 months
+\item \textbf{Peak Month:} May 2020 (37,562 rows)
+\item \textbf{Consistent Processing:} All layers maintained identical row counts, indicating perfect data retention
+\item \textbf{Growth Pattern:} Steady cumulative growth with seasonal variations in monthly volumes
+\end{itemize}

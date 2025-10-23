@@ -1,0 +1,2 @@
+analysis_type,total_hosts_with_multiple_listings,concentrated_hosts,distributed_hosts,concentrated_percentage,distributed_percentage,avg_listings_per_host,avg_lgas_per_host,max_lgas_per_host
+SUMMARY,17023,16931,92,99.46,0.54,16.285378605416202,1.006050637372966,4

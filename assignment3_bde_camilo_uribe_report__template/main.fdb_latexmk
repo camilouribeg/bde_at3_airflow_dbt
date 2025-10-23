@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1760871704.54968 "/Users/user/Documents/GitHub/UTS/bde_at3_airflow_dbt/assignment3_bde_camilo_uribe_report__template/main.tex" "main.pdf" "main" 1760871704.72422 2
-  "/Users/user/Documents/GitHub/UTS/bde_at3_airflow_dbt/assignment3_bde_camilo_uribe_report__template/main.tex" 1760868425.09143 2709 c5ad7674a4ab44a7485ce03eca3e3b2c ""
+["pdflatex"] 1761191839.85307 "/Users/user/Documents/GitHub/UTS/bde_at3_airflow_dbt/assignment3_bde_camilo_uribe_report__template/main.tex" "main.pdf" "main" 1761191839.9315 2
+  "/Users/user/Documents/GitHub/UTS/bde_at3_airflow_dbt/assignment3_bde_camilo_uribe_report__template/main.tex" 1761191839.49901 2755 99d833c17540755b72d4873723e4e325 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/map/fontname/texfonts.map" 1741388039 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/tfm/public/cm/cmr12.tfm" 1741388039 1288 655e228510b4c2a1abe905c368440826 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/base/article.cls" 1741388039 20144 63d8bacaf52e5abf4db3bc322373e1d4 ""
@@ -11,8 +11,8 @@
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/l3packages/xparse/xparse.sty" 1741388039 9783 ab4bee47700c04aadedb8da27591b0ab ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/web2c/texmf.cnf" 1741388039 42151 79f67285bdd95beca4d137b380b4b9e5 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-var/web2c/pdftex/pdflatex.fmt" 1741388039 3346132 6a939494d30ef2febcac9d47a1191e44 ""
-  "main.aux" 1760871704.54709 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "main.tex" 1760868425.09143 2709 c5ad7674a4ab44a7485ce03eca3e3b2c ""
+  "main.aux" 1761191839.85269 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "main.tex" 1761191839.49901 2755 99d833c17540755b72d4873723e4e325 ""
   (generated)
   "main.aux"
   "main.log"

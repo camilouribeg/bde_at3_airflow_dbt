@@ -6,14 +6,14 @@ Aim:
 The aim of this assignment is to build production-ready ELT data pipelines using Apache Airflow and dbt Cloud. You will process and transform Airbnb and Census data for Sydney, load it into a data warehouse following a medallion architecture (Bronze, Silver, Gold), and create a data mart for analytical insights. The assignment also includes performing ad-hoc analyses to address key business questions.
 
 Introduction to the datasets
- 
+
 	•	Airbnb
 Airbnb is an online-based marketing company that connects people looking for accommodation (Airbnb guests) to people looking to rent their properties (Airbnb hosts) on a short-term or long-term basis. The rental properties include apartments (dominant), homes, boats, and a whole lot more. As of 2019, there are 150 million users of Airbnb services in 191 countries, making it a major disruptor of the traditional hospitality industry (this is akin to how Uber and other emerging transportation services have disrupted the traditional intra-city transportation services). As a rental ecosystem, Airbnb generates tons of data including but not limited to: density of rentals across regions (cities and neighbourhoods), price variations across rentals, host-guest interactions in the form of reviews, and so forth. 
 
 We will focus on Sydney for this assignment, you can find the original data and more information on this link, however the website is purging the available data regularly.
 
 The modified dataset used in this assignment is from May 2020 to April 2021..
-  
+
 	•	Census
 The Census of Population and Housing (Census) is Australia’s largest statistical collection undertaken by the Australian Bureau of Statistics (ABS). For more than 100 years, the Census has provided a snapshot of Australia, showing how the country has changed over time, allowing it to plan for the future. The aim of the Census is to accurately collect data on the key characteristics of people in Australia on Census night and the dwellings in which they live. In 2016, the Census counted close to 10 million dwellings and approximately 24 million people, the largest number counted to date.
 
@@ -26,31 +26,31 @@ You will have to set up an Airflow and Postgres environment using GCP (Cloud Com
 
 Part 0: Download the datasets:
 	•	12 months of Airbnb listing data for Sydney: link
- 
+
 	•	The tables G01 (“Selected Person Characteristics by Sex”) and G02 (“Selected Medians and Averages”) of the General Community Profile Pack from the 2016 census at the LGA level: link. 
- 
+
 	•	A dataset to help you join both datasets based on LGAs code and a mapping between LGAs and Suburbs: link.
 
 Part 1: Use Airflow to load the initial raw data into Postgres
 	•	Upload the Dataset: Upload the first month of Airbnb data (05_2020.csv) + the census dataset and the LGAs mapping into the Airflow storage bucket.
- 
+
 	•	Using DBeaver, set up a Bronze schema in your Postgres instance and create the necessary raw tables to store the initial data.
- 
+
 	•	Build an Airflow DAG with no set schedule interval (schedule_interval=None) that reads the data from the storage bucket and loads it into the raw tables within the Bronze schema on Postgres.
 
 Part 2: Design a data warehouse with dbt
 	•	Create a data warehouse architecture on Postgres using the Medallion architecture (Bronze, Silver, Gold) with dbt. Include at least 14 dimension tables (e.g., host, suburb, LGA, etc.) along with two Census tables as reference data in the Gold layer. The layers are defined as follows:
- 
+
 	•	Bronze: Stores the raw tables loaded from Airflow.
- 
+
 	•	Silver: Contains cleaned and transformed versions of the Bronze tables with consistent naming conventions. This layer includes snapshots for your dimensions using a timestamp strategy, addressing any issues with listing dates and LGAs. You will have to decompose the listings table into different entities and snapshot them with the timestamp strategy (use the correct timestamp column). Snapshots are only for tables who are going to be transformed into dimension (don’t do it on the fact table).
- 
+
 	•	Gold: 
 	•	Implements a star schema consisting of dimension and fact tables, where fact tables contain only IDs and metrics (e.g., price). 
 	•	Datamart : This layer stores the answers to the key business questions. It should be built as views on top of the fact table joined with the relevant dimensions. When you join, you must use the Slowly Changing Dimensions Type 2 (SCD2) logic so that each fact row is shown with the correct dimension values that were valid at that point in time. In other words, the datamart should always reflect how the data actually looked during that specific period, not just the latest version of a dimension..
-  
+
 	•	For the datamart, create the 3 following views:
- 
+
 	•	dm_listing_neighbourhood:
 This view should provide insights per listing_neighbourhood and month/year with the following metrics:
 	•	Active listings rate
@@ -64,7 +64,7 @@ This view should provide insights per listing_neighbourhood and month/year with 
 	•	Average Estimated revenue per active listings
  
 The view should be ordered by listing_neighbourhood and month/year.
- 
+
 	•	dm_property_type:
 This view should present information per property_type, room_type, accommodates, and month/year including:
 	•	Active listings rate
@@ -78,7 +78,7 @@ This view should present information per property_type, room_type, accommodates,
 	•	Average Estimated revenue per active listings
 
 The view should be ordered by property_type, room_type, accommodates, and month/year.
- 
+
 	•	Dm_host_neighbourhood
 This view provides data per host_neighbourhood_lga (derived from transforming host_neighbourhood to the corresponding LGA) and month/year with the following metrics:
 	•	Number of distinct host
@@ -107,15 +107,15 @@ Part 3: Load the Remaining Airbnb Data
 
 Part 4: Ad-hoc analysis
 Answer the following questions with supporting results (write SQL on Postgres):
- 
+
 	•	What are the demographic differences (e.g., age group distribution, household size) between the top 13 performing and lowest 13 performing LGAs based on estimated revenue per active listing over the last 112 months?
- 
+
 	•	Is there a correlation between the median age of a neighbourhood (from Census data) and the revenue generated per active listing in that neighbourhood?
- 
+
 	•	What will be the best type of listing (property type, room type and accommodates for) for the top 15 “listing_neighbourhood” (in terms of estimated revenue per active listing) to have the highest number of stays?
- 
+
 	•	For hosts with multiple listings in Vic are their properties concentrated within the same LGA, or are they distributed across different LGAs?
- 
+
 	•	For hosts with a single Airbnb listing i does the estimated revenue over the last 112 months cover the annualised median mortgage repayment in the corresponding LGA? Which LGA has the highest percentage of hosts that can cover it?
 
 Add the answers with screenshots in your report.
@@ -155,7 +155,7 @@ A good “handover” report should contained:
 You can assume that the reader of your report will have a similar understanding and knowledge of any technical skills (Python/SQL).
 
 Assessment Criteria:
- 
+
 	•	Quality of code (Python/SQL/dbt).
 	•	Justification of data transformation, data formats, data storage, DAGs structure and accuracy of results with evidence supporting claims
 	•	Quality of findings and recommendations for business questions.

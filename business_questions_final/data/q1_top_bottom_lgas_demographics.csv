@@ -1,0 +1,7 @@
+lga_name,lga_code,avg_revenue_per_active_listing,revenue_rank,performance_group,male_population,female_population,total_population,male_percentage,female_percentage,median_age_persons,median_mortgage_repay_monthly,median_tot_hhd_inc_weekly,median_mortgage_repay_annual,median_tot_hhd_inc_annual,mortgage_to_income_ratio_pct
+Mosman,15350,12162.201,1,TOP_3,13189,15290,28479,46.31,53.69,42.0,3000.0,2522.0,36000.0,131144.0,27.45
+Hunters Hill,14100,10230.733333333334,2,TOP_3,6987,7016,14003,49.9,50.1,43.0,3033.0,2467.0,36396.0,128284.0,28.37
+Woollahra,18500,10007.3225,3,TOP_3,25232,29009,54241,46.52,53.48,39.0,3200.0,2687.0,38400.0,139724.0,27.48
+Burwood,11300,3237.3725,14,BOTTOM_3,17785,19028,36813,48.31,51.69,33.0,2200.0,1569.0,26400.0,81588.0,32.36
+Hornsby,14000,2535.41,15,BOTTOM_3,69634,73027,142661,48.81,51.19,40.0,2400.0,2121.0,28800.0,110292.0,26.11
+Liverpool,14900,2174.673333333333,16,BOTTOM_3,101351,102975,204326,49.6,50.4,33.0,2123.0,1550.0,25476.0,80600.0,31.61

@@ -10,5 +10,23 @@ Part 3 focuses on the sequential loading of remaining Airbnb datasets (6 months 
 % - Issues encountered during sequential loading
 % - Final data warehouse statistics
 
+\subsection{Data Growth Monitoring}
+The sequential loading process was monitored to track data growth and ensure successful processing across all pipeline stages.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{images/pipeline_growth_analysis.png}
+  \caption{Data growth analysis showing row counts across bronze, silver, gold, and mart layers throughout the sequential loading process.}
+\end{figure}
+
+\subsection{Automated Pipeline Execution}
+The process followed a two-stage automation: Airflow handled data ingestion, then triggered dbt Cloud jobs for transformation. Initial challenges included API token configuration and job execution issues, but these were resolved through systematic troubleshooting. The final implementation achieved seamless automation with successful data processing.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{images/dbt_upload_history.png}
+  \caption{Airflow data ingestion and dbt Cloud job execution history showing successful automated runs after resolving initial configuration issues.}
+\end{figure}
+
 \subsection{Implementation Summary}
-The sequential data loading process successfully processed 6 months of Airbnb data with automated dbt Cloud integration, maintaining data integrity and chronological order throughout the pipeline.
+The sequential data loading process successfully processed 6 months of Airbnb data with automated dbt Cloud integration, maintaining data integrity and chronological order throughout the pipeline. Monitoring confirmed consistent data growth across all layers and successful automated job execution.

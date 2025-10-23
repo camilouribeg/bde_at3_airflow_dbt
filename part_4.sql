@@ -118,15 +118,15 @@ ORDER BY tbl.avg_revenue_per_active_listing DESC;
 -- Question: Is there a correlation between the median age of a neighbourhood 
 -- (from Census data) and the revenue generated per active listing in that neighbourhood?
 
+-- Query 2: Age vs Revenue Correlation (Minimal)
+-- Answers: Is there a correlation between the median age of a neighbourhood 
+-- (from Census data) and the revenue generated per active listing in that neighbourhood?
 WITH lga_revenue_data AS (
     -- Calculate average revenue per active listing by LGA
     SELECT 
         lga.lga_name,
         lga.lga_code,
-        AVG(dm.avg_estimated_revenue_per_active_listing) as avg_revenue_per_active_listing,
-        COUNT(DISTINCT dm.scraped_year || '-' || dm.scraped_month) as months_with_data,
-        SUM(dm.active_listings) as total_active_listings,
-        COUNT(DISTINCT dm.listing_neighbourhood) as neighbourhoods_count
+        AVG(dm.avg_estimated_revenue_per_active_listing) as avg_revenue_per_active_listing
     FROM public_gold.dm_listing_neighbourhood dm
     JOIN public_gold.dim_suburb ds ON dm.listing_neighbourhood = ds.suburb_name
     JOIN public_gold.dim_lga lga ON UPPER(ds.lga_name) = UPPER(lga.lga_name)
@@ -134,29 +134,12 @@ WITH lga_revenue_data AS (
     GROUP BY lga.lga_name, lga.lga_code
     HAVING COUNT(DISTINCT dm.scraped_year || '-' || dm.scraped_month) >= 6
 )
--- Join with demographic data from Census
+-- Join with demographic data from Census (age data only)
 SELECT 
     lrd.lga_name,
-    lrd.lga_code,
     lrd.avg_revenue_per_active_listing,
-    lrd.months_with_data,
-    lrd.total_active_listings,
-    lrd.neighbourhoods_count,
-    -- Demographics from Census G01
-    c1.male_population,
-    c1.female_population,
-    c1.total_population,
-    c1.male_percentage,
-    c1.female_percentage,
-    -- Demographics from Census G02 (age data)
-    c2.median_age_persons,
-    c2.median_mortgage_repay_monthly,
-    c2.median_tot_hhd_inc_weekly,
-    c2.median_mortgage_repay_annual,
-    c2.median_tot_hhd_inc_annual,
-    c2.mortgage_to_income_ratio_pct
+    c2.median_age_persons
 FROM lga_revenue_data lrd
-LEFT JOIN public_silver.silver_census_g01 c1 ON 'LGA' || lrd.lga_code = c1.lga_code_2016
 LEFT JOIN public_silver.silver_census_g02 c2 ON 'LGA' || lrd.lga_code = c2.lga_code_2016
 WHERE c2.median_age_persons IS NOT NULL  -- Only LGAs with age data
 ORDER BY lrd.avg_revenue_per_active_listing DESC;
@@ -199,33 +182,43 @@ FROM ranked_neighbourhoods
 WHERE revenue_rank <= 5
 ORDER BY avg_revenue_per_active_listing DESC;
 
--- Query 3.2: Analyze Property Types by Total Stays
--- Analyze property types by total stays to find best types
+-- Query 3.2: BEST Property Type for Top 5 Neighbourhoods (Minimal)
+-- Find the best property type specifically for the top 5 neighbourhoods from Query 3.1
+-- This query gives you exactly what the question asks for - no extra information
+WITH top_5_neighbourhoods AS (
+    -- Get the top 5 neighbourhoods from Query 3.1
+    SELECT 
+        listing_neighbourhood,
+        AVG(avg_estimated_revenue_per_active_listing) as avg_revenue_per_active_listing
+    FROM public_gold.dm_listing_neighbourhood
+    WHERE scraped_year >= 2020
+    GROUP BY listing_neighbourhood
+    HAVING COUNT(DISTINCT scraped_year || '-' || scraped_month) >= 6
+    ORDER BY AVG(avg_estimated_revenue_per_active_listing) DESC
+    LIMIT 5
+),
+property_analysis AS (
+    -- Analyze property types specifically for the top 5 neighbourhoods
+    SELECT 
+        dp.property_type,
+        dp.room_type,
+        dp.accommodates,
+        SUM(fl.number_of_stays) as total_stays
+    FROM public_gold.fact_listings fl
+    JOIN public_gold.dim_property dp ON fl.property_key = dp.property_key
+    JOIN public_gold.dim_neighbourhood dn ON fl.neighbourhood_key = dn.neighbourhood_key
+    JOIN top_5_neighbourhoods t5n ON dn.listing_neighbourhood = t5n.listing_neighbourhood
+    WHERE fl.scraped_date >= '2020-01-01'
+    GROUP BY dp.property_type, dp.room_type, dp.accommodates
+)
 SELECT 
     property_type,
     room_type,
     accommodates,
-    AVG(avg_estimated_revenue_per_active_listing) as avg_revenue_per_listing,
-    SUM(total_stays) as total_stays_for_property_type,
-    COUNT(DISTINCT scraped_year || '-' || scraped_month) as months_with_data,
-    SUM(active_listings) as total_active_listings,
-    -- Calculate stays per listing
-    CASE 
-        WHEN SUM(active_listings) > 0 
-        THEN SUM(total_stays)::numeric / SUM(active_listings)
-        ELSE 0 
-    END as avg_stays_per_listing,
-    -- Calculate revenue per stay
-    CASE 
-        WHEN SUM(total_stays) > 0 
-        THEN AVG(avg_estimated_revenue_per_active_listing)::numeric / (SUM(total_stays)::numeric / SUM(active_listings))
-        ELSE 0 
-    END as revenue_per_stay
-FROM public_gold.dm_property_type
-WHERE scraped_year >= 2020
-GROUP BY property_type, room_type, accommodates
-HAVING COUNT(DISTINCT scraped_year || '-' || scraped_month) >= 6
-ORDER BY total_stays_for_property_type DESC;
+    total_stays
+FROM property_analysis
+ORDER BY total_stays DESC
+LIMIT 1;
 
 -- =====================================================
 -- BUSINESS QUESTION 4: Host Distribution Across LGAs
@@ -233,6 +226,7 @@ ORDER BY total_stays_for_property_type DESC;
 -- Question: For hosts with multiple listings in Vic are their properties concentrated 
 -- within the same LGA, or are they distributed across different LGAs?
 
+-- Query 4: Host Distribution Analysis - Final Clean Version
 WITH host_lga_analysis AS (
     -- Count listings per host per LGA
     SELECT 
@@ -243,7 +237,7 @@ WITH host_lga_analysis AS (
         AVG(fl.price) as avg_price_in_lga,
         SUM(fl.number_of_stays) as total_stays_in_lga
     FROM public_gold.fact_listings fl
-    JOIN public_gold.dim_suburb ds ON fl.neighbourhood_key = ds.suburb_name
+    JOIN public_gold.dim_suburb ds ON SPLIT_PART(fl.neighbourhood_key, '|', 2) = ds.suburb_name
     JOIN public_gold.dim_lga lga ON UPPER(ds.lga_name) = UPPER(lga.lga_name)
     WHERE fl.scraped_date >= '2020-01-01'
     GROUP BY fl.host_id, ds.lga_name, lga.lga_code
@@ -255,28 +249,32 @@ host_summary AS (
         COUNT(DISTINCT lga_name) as lgas_count,
         SUM(listings_in_lga) as total_listings,
         SUM(total_stays_in_lga) as total_stays,
-        AVG(avg_price_in_lga) as avg_price_across_lgas
+        AVG(avg_price_in_lga) as avg_price_across_lgas,
+        CASE 
+            WHEN COUNT(DISTINCT lga_name) = 1 THEN 'CONCENTRATED'
+            ELSE 'DISTRIBUTED'
+        END as distribution_type
     FROM host_lga_analysis
     GROUP BY host_id
     HAVING SUM(listings_in_lga) > 1  -- Only hosts with multiple listings
+),
+distribution_analysis AS (
+    -- Calculate summary statistics
+    SELECT 
+        COUNT(*) as total_hosts_with_multiple_listings,
+        COUNT(CASE WHEN distribution_type = 'CONCENTRATED' THEN 1 END) as concentrated_hosts,
+        COUNT(CASE WHEN distribution_type = 'DISTRIBUTED' THEN 1 END) as distributed_hosts,
+        ROUND(COUNT(CASE WHEN distribution_type = 'CONCENTRATED' THEN 1 END)::numeric / COUNT(*) * 100, 1) as concentrated_percentage,
+        ROUND(COUNT(CASE WHEN distribution_type = 'DISTRIBUTED' THEN 1 END)::numeric / COUNT(*) * 100, 1) as distributed_percentage
+    FROM host_summary
 )
 SELECT 
-    hs.host_id,
-    hs.lgas_count,
-    hs.total_listings,
-    hs.total_stays,
-    hs.avg_price_across_lgas,
-    CASE 
-        WHEN hs.lgas_count = 1 THEN 'CONCENTRATED'
-        ELSE 'DISTRIBUTED'
-    END as distribution_type,
-    -- Get LGA details for each host
-    STRING_AGG(DISTINCT hla.lga_name, ', ') as lga_names,
-    STRING_AGG(DISTINCT hla.lga_code, ', ') as lga_codes
-FROM host_summary hs
-JOIN host_lga_analysis hla ON hs.host_id = hla.host_id
-GROUP BY hs.host_id, hs.lgas_count, hs.total_listings, hs.total_stays, hs.avg_price_across_lgas
-ORDER BY hs.total_listings DESC, hs.lgas_count DESC;
+    total_hosts_with_multiple_listings,
+    concentrated_hosts,
+    distributed_hosts,
+    concentrated_percentage,
+    distributed_percentage
+FROM distribution_analysis;
 
 -- =====================================================
 -- BUSINESS QUESTION 5: Revenue vs Mortgage Coverage
@@ -285,8 +283,9 @@ ORDER BY hs.total_listings DESC, hs.lgas_count DESC;
 -- over the available 12 months (May 2020-April 2021) cover the annualised median mortgage repayment in the 
 -- corresponding LGA? Which LGA has the highest percentage of hosts that can cover it?
 
+-- Query 5.1: Overall Coverage Analysis
+-- Answers: What percentage of single-listing hosts can cover their mortgage?
 WITH single_listing_hosts AS (
-    -- Identify hosts with only one listing
     SELECT 
         host_id,
         COUNT(DISTINCT listing_id) as total_listings
@@ -296,61 +295,102 @@ WITH single_listing_hosts AS (
     HAVING COUNT(DISTINCT listing_id) = 1
 ),
 host_revenue_analysis AS (
-    -- Calculate annual revenue for single listing hosts
     SELECT 
         slh.host_id,
         fl.listing_id,
         ds.lga_name,
         lga.lga_code,
-        AVG(fl.price) as avg_daily_price,
-        AVG(fl.number_of_stays) as avg_monthly_stays,
-        AVG(fl.estimated_revenue_30_days) as avg_monthly_revenue,
-        -- Estimate annual revenue (monthly * 12)
-        AVG(fl.estimated_revenue_30_days) * 12 as estimated_annual_revenue,
-        COUNT(DISTINCT fl.scraped_date) as days_with_data
+        AVG(fl.estimated_revenue_30_days) * 12 as estimated_annual_revenue
     FROM single_listing_hosts slh
     JOIN public_gold.fact_listings fl ON slh.host_id = fl.host_id
-    JOIN public_gold.dim_suburb ds ON fl.neighbourhood_key = ds.suburb_name
+    JOIN public_gold.dim_suburb ds ON SPLIT_PART(fl.neighbourhood_key, '|', 2) = ds.suburb_name
     JOIN public_gold.dim_lga lga ON UPPER(ds.lga_name) = UPPER(lga.lga_name)
     WHERE fl.scraped_date >= '2020-01-01'
     GROUP BY slh.host_id, fl.listing_id, ds.lga_name, lga.lga_code
 ),
 lga_mortgage_data AS (
-    -- Get mortgage data by LGA
     SELECT 
         lga_code_2016,
         median_mortgage_repay_annual
     FROM public_silver.silver_census_g02
     WHERE median_mortgage_repay_annual IS NOT NULL
+),
+coverage_analysis AS (
+    SELECT 
+        hra.host_id,
+        hra.estimated_annual_revenue,
+        lmd.median_mortgage_repay_annual,
+        CASE 
+            WHEN hra.estimated_annual_revenue >= lmd.median_mortgage_repay_annual 
+            THEN 'COVERS'
+            ELSE 'DOES_NOT_COVER'
+        END as mortgage_coverage_status
+    FROM host_revenue_analysis hra
+    JOIN lga_mortgage_data lmd ON 'LGA' || hra.lga_code = lmd.lga_code_2016
 )
 SELECT 
-    hra.host_id,
-    hra.listing_id,
-    hra.lga_name,
-    hra.lga_code,
-    hra.avg_daily_price,
-    hra.avg_monthly_stays,
-    hra.avg_monthly_revenue,
-    hra.estimated_annual_revenue,
-    hra.days_with_data,
-    lmd.median_mortgage_repay_annual,
-    -- Calculate coverage ratio
-    CASE 
-        WHEN lmd.median_mortgage_repay_annual > 0 
-        THEN hra.estimated_annual_revenue / lmd.median_mortgage_repay_annual
-        ELSE NULL 
-    END as revenue_to_mortgage_ratio,
-    -- Determine if revenue covers mortgage
-    CASE 
-        WHEN lmd.median_mortgage_repay_annual IS NOT NULL AND hra.estimated_annual_revenue >= lmd.median_mortgage_repay_annual 
-        THEN 'COVERS'
-        WHEN lmd.median_mortgage_repay_annual IS NOT NULL 
-        THEN 'DOES_NOT_COVER'
-        ELSE 'NO_MORTGAGE_DATA'
-    END as mortgage_coverage_status
-FROM host_revenue_analysis hra
-LEFT JOIN lga_mortgage_data lmd ON 'LGA' || hra.lga_code = lmd.lga_code_2016
-ORDER BY hra.estimated_annual_revenue DESC;
+    COUNT(*) as total_single_listing_hosts,
+    COUNT(CASE WHEN mortgage_coverage_status = 'COVERS' THEN 1 END) as hosts_that_cover,
+    COUNT(CASE WHEN mortgage_coverage_status = 'DOES_NOT_COVER' THEN 1 END) as hosts_that_dont_cover,
+    ROUND(COUNT(CASE WHEN mortgage_coverage_status = 'COVERS' THEN 1 END)::numeric / COUNT(*) * 100, 1) as coverage_percentage,
+    ROUND(COUNT(CASE WHEN mortgage_coverage_status = 'DOES_NOT_COVER' THEN 1 END)::numeric / COUNT(*) * 100, 1) as no_coverage_percentage
+FROM coverage_analysis;
+
+-- Query 5.2: Best LGA by Coverage Percentage
+-- Answers: Which LGA has the highest percentage of hosts that can cover it?
+WITH single_listing_hosts AS (
+    SELECT 
+        host_id,
+        COUNT(DISTINCT listing_id) as total_listings
+    FROM public_gold.fact_listings
+    WHERE scraped_date >= '2020-01-01'
+    GROUP BY host_id
+    HAVING COUNT(DISTINCT listing_id) = 1
+),
+host_revenue_analysis AS (
+    SELECT 
+        slh.host_id,
+        fl.listing_id,
+        ds.lga_name,
+        lga.lga_code,
+        AVG(fl.estimated_revenue_30_days) * 12 as estimated_annual_revenue
+    FROM single_listing_hosts slh
+    JOIN public_gold.fact_listings fl ON slh.host_id = fl.host_id
+    JOIN public_gold.dim_suburb ds ON SPLIT_PART(fl.neighbourhood_key, '|', 2) = ds.suburb_name
+    JOIN public_gold.dim_lga lga ON UPPER(ds.lga_name) = UPPER(lga.lga_name)
+    WHERE fl.scraped_date >= '2020-01-01'
+    GROUP BY slh.host_id, fl.listing_id, ds.lga_name, lga.lga_code
+),
+lga_mortgage_data AS (
+    SELECT 
+        lga_code_2016,
+        median_mortgage_repay_annual
+    FROM public_silver.silver_census_g02
+    WHERE median_mortgage_repay_annual IS NOT NULL
+),
+lga_coverage_analysis AS (
+    SELECT 
+        hra.lga_name,
+        hra.lga_code,
+        COUNT(*) as total_hosts,
+        COUNT(CASE WHEN hra.estimated_annual_revenue >= lmd.median_mortgage_repay_annual THEN 1 END) as hosts_that_cover,
+        COUNT(CASE WHEN hra.estimated_annual_revenue < lmd.median_mortgage_repay_annual THEN 1 END) as hosts_that_dont_cover,
+        ROUND(COUNT(CASE WHEN hra.estimated_annual_revenue >= lmd.median_mortgage_repay_annual THEN 1 END)::numeric / COUNT(*) * 100, 1) as coverage_percentage
+    FROM host_revenue_analysis hra
+    JOIN lga_mortgage_data lmd ON 'LGA' || hra.lga_code = lmd.lga_code_2016
+    GROUP BY hra.lga_name, hra.lga_code
+    HAVING COUNT(*) >= 5  -- Only LGAs with at least 5 hosts
+)
+SELECT 
+    lga_name,
+    lga_code,
+    total_hosts,
+    hosts_that_cover,
+    hosts_that_dont_cover,
+    coverage_percentage
+FROM lga_coverage_analysis
+ORDER BY coverage_percentage DESC
+LIMIT 1;
 
 -- =====================================================
 -- END OF PART 4 SQL QUERIES
